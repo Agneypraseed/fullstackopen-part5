@@ -14,6 +14,7 @@ const App = () => {
   const [url, setUrl] = useState("");
   const [notification, setNotification] = useState(null);
   const [status, setStatus] = useState("success");
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -129,23 +130,31 @@ const App = () => {
   };
 
   const blogForm = () => {
+    const hideWhenVisible = { display: showForm ? "none" : "" };
+    const showWhenVisible = { display: showForm ? "" : "none" };
     return (
-      <>
-        <h2>Create New</h2>
-        <form onSubmit={addBlog}>
-          <div>
-            Title: <input value={title} onChange={handleTitle} />
-          </div>
-          <div>
-            Author: <input value={author} onChange={handleAuthor} />
-          </div>
-          <div>
-            Url: <input value={url} onChange={handleUrl} />
-          </div>
-          <button type="submit">Create</button>
-        </form>
-        <br />
-      </>
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setShowForm(true)}>new note</button>
+        </div>
+        <div style={showWhenVisible}>
+          <h2>Create New</h2>
+          <form onSubmit={addBlog}>
+            <div>
+              Title: <input value={title} onChange={handleTitle} />
+            </div>
+            <div>
+              Author: <input value={author} onChange={handleAuthor} />
+            </div>
+            <div>
+              Url: <input value={url} onChange={handleUrl} />
+            </div>
+            <button type="submit">Create</button>
+          </form>
+          <button onClick={() => setShowForm(false)}>cancel</button>
+          <br />
+        </div>
+      </div>
     );
   };
 
