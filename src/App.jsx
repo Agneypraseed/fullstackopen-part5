@@ -14,8 +14,14 @@ const App = () => {
   const [notification, setNotification] = useState(null);
   const [status, setStatus] = useState("success");
 
+  const sortBlogs = (blogs) => {
+    setBlogs([...blogs].sort((a, b) => b.likes - a.likes));
+  };  
+
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
+    blogService.getAll().then((blogs) => {
+      sortBlogs(blogs);
+    });
   }, []);
 
   useEffect(() => {
@@ -129,7 +135,7 @@ const App = () => {
       </p>
       {blogForm()}
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog}/>
+        <Blog key={blog.id} blog={blog} sortBlogs={sortBlogs}/>
       ))}
     </div>
   );

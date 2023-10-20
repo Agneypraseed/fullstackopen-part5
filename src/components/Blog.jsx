@@ -1,7 +1,7 @@
 import { useState } from "react";
 import blogService from "../services/blogs";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, sortBlogs }) => {
   const [showDetails, setShowDetails] = useState(false);
   const [likes, setLikes] = useState(blog.likes);
 
@@ -16,6 +16,9 @@ const Blog = ({ blog }) => {
   const addLike = async () => {
     const newblog = await blogService.addLike(blog.id, likes + 1);
     setLikes(newblog.likes);
+    blogService.getAll().then((blogs) => {
+      sortBlogs(blogs);
+    });
   };
 
   if (showDetails) {
