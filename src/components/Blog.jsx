@@ -21,6 +21,11 @@ const Blog = ({ blog, sortBlogs }) => {
     });
   };
 
+  const handleDelete = () => {
+    if (window.confirm(`Remove Blog ${blog.title} by ${blog.author}`))
+      blogService.deleteBlog(blog.id);
+  };  
+
   if (showDetails) {
     return (
       <div style={blogStyle}>
@@ -32,7 +37,14 @@ const Blog = ({ blog, sortBlogs }) => {
         likes {likes}
         <button onClick={addLike}>like</button>
         <br />
-        {JSON.parse(window.localStorage.getItem("user")).username}
+        {blog.user.username}
+        <br />
+        {blog.user.username ===
+        JSON.parse(window.localStorage.getItem("user")).username ? (
+          <button onClick={handleDelete}>remove</button>
+        ) : (
+          ""
+        )}
       </div>
     );
   }

@@ -16,7 +16,7 @@ const App = () => {
 
   const sortBlogs = (blogs) => {
     setBlogs([...blogs].sort((a, b) => b.likes - a.likes));
-  };  
+  };
 
   useEffect(() => {
     blogService.getAll().then((blogs) => {
@@ -90,7 +90,15 @@ const App = () => {
     blogService
       .createBlog(newBlog)
       .then((savedBlog) => {
-        setBlogs(blogs.concat(savedBlog));
+        const savedBlogWithUserName = {
+          ...savedBlog,
+          user: {
+            id: savedBlog.user,
+            username: user.username,
+            name: user.name,
+          },
+        };
+        setBlogs(blogs.concat(savedBlogWithUserName));
         setStatus("success");
         setNotification(
           `a new blog ${savedBlog.title} by ${savedBlog.author} added`
@@ -135,7 +143,7 @@ const App = () => {
       </p>
       {blogForm()}
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} sortBlogs={sortBlogs}/>
+        <Blog key={blog.id} blog={blog} sortBlogs={sortBlogs} />
       ))}
     </div>
   );
