@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
 import BlogForm from "./components/BlogForm";
+import Togglable from "./components/Togglable";
 import "./app.css";
 
 const App = () => {
@@ -10,12 +11,8 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
   const [notification, setNotification] = useState(null);
   const [status, setStatus] = useState("success");
-  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -49,7 +46,6 @@ const App = () => {
       setTimeout(() => {
         setNotification(null);
       }, 5000);
-      console.log(exception);
     }
   };
 
@@ -96,7 +92,7 @@ const App = () => {
         setTimeout(() => {
           setNotification(null);
         }, 5000);
-        setShowForm(false);
+        blogFormRef.current.toggleVisibility();
       })
       .catch((error) => {
         setStatus("error");
@@ -109,20 +105,13 @@ const App = () => {
       });
   };
 
+  const blogFormRef = useRef();
+
   const blogForm = () => {
-    const hideWhenVisible = { display: showForm ? "none" : "" };
-    const showWhenVisible = { display: showForm ? "" : "none" };
     return (
-      <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setShowForm(true)}>new note</button>
-        </div>
-        <div style={showWhenVisible}>
-          <BlogForm createBlog={addBlog} />
-          <button onClick={() => setShowForm(false)}>cancel</button>
-          <br />
-        </div>
-      </div>
+      <Togglable buttonLabel="new form" ref={blogFormRef}>
+        <BlogForm createBlog={addBlog} />
+      </Togglable>
     );
   };
 
