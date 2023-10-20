@@ -105,6 +105,7 @@ const App = () => {
         setTitle("");
         setAuthor("");
         setUrl("");
+        setShowForm(false);
       })
       .catch((error) => {
         setStatus("error");
