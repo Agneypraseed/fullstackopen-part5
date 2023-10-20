@@ -119,6 +119,36 @@ const App = () => {
       });
   };
 
+  const addLike = async (blogId, likes) => {
+    const newBlog = await blogService.addLike(blogId, likes);
+    const newBlogWithUserName = {
+      ...newBlog,
+      user: {
+        id: newBlog.user,
+        username: user.username,
+        name: user.name,
+      },
+    };
+    const newBlogs = blogs.map((blog) =>
+      blog.id !== blogId ? blog : newBlogWithUserName
+    );
+    sortBlogs(newBlogs);
+  };
+
+  const deleteBlog = async (blogId) => {
+    const response = await blogService.deleteBlog(blogId);
+    if (response.status !== 204) {
+      setStatus("error");
+      setNotification(`Could not Delete`);
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
+      return;
+    }
+    const newBlogs = blogs.filter((blog) => blog.id !== blogId);
+    sortBlogs(newBlogs);
+  };
+
   const blogFormRef = useRef();
 
   const blogForm = () => {
@@ -143,7 +173,12 @@ const App = () => {
       </p>
       {blogForm()}
       {blogs.map((blog) => (
-        <Blog key={blog.id} blog={blog} sortBlogs={sortBlogs} />
+        <Blog
+          key={blog.id}
+          blog={blog}
+          addLike={addLike}
+          deleteBlog={deleteBlog}
+        />
       ))}
     </div>
   );
