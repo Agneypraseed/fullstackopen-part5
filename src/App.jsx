@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Blog from "./components/Blog";
 import blogService from "./services/blogs";
 import loginService from "./services/login";
+import BlogForm from "./components/BlogForm";
 import "./app.css";
 
 const App = () => {
@@ -83,14 +84,7 @@ const App = () => {
     window.location.reload();
   };
 
-  const addBlog = (e) => {
-    e.preventDefault();
-    const newBlog = {
-      title,
-      author,
-      url,
-    };
-
+  const addBlog = (newBlog) => {
     blogService
       .createBlog(newBlog)
       .then((savedBlog) => {
@@ -102,9 +96,6 @@ const App = () => {
         setTimeout(() => {
           setNotification(null);
         }, 5000);
-        setTitle("");
-        setAuthor("");
-        setUrl("");
         setShowForm(false);
       })
       .catch((error) => {
@@ -118,18 +109,6 @@ const App = () => {
       });
   };
 
-  const handleTitle = (e) => {
-    setTitle(e.target.value);
-  };
-
-  const handleAuthor = (e) => {
-    setAuthor(e.target.value);
-  };
-
-  const handleUrl = (e) => {
-    setUrl(e.target.value);
-  };
-
   const blogForm = () => {
     const hideWhenVisible = { display: showForm ? "none" : "" };
     const showWhenVisible = { display: showForm ? "" : "none" };
@@ -139,19 +118,7 @@ const App = () => {
           <button onClick={() => setShowForm(true)}>new note</button>
         </div>
         <div style={showWhenVisible}>
-          <h2>Create New</h2>
-          <form onSubmit={addBlog}>
-            <div>
-              Title: <input value={title} onChange={handleTitle} />
-            </div>
-            <div>
-              Author: <input value={author} onChange={handleAuthor} />
-            </div>
-            <div>
-              Url: <input value={url} onChange={handleUrl} />
-            </div>
-            <button type="submit">Create</button>
-          </form>
+          <BlogForm createBlog={addBlog} />
           <button onClick={() => setShowForm(false)}>cancel</button>
           <br />
         </div>
