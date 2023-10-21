@@ -35,10 +35,7 @@ test("click on button view will the shown details", async () => {
     likes: 100,
     user: "652a4e1162ee1ca7690f3fc0",
   };
-  window.localStorage.setItem(
-    "user",
-    JSON.stringify({ username: "tester" })
-  );
+  window.localStorage.setItem("user", JSON.stringify({ username: "tester" }));
 
   const { container } = render(<Blog blog={blog} />);
 
@@ -49,4 +46,30 @@ test("click on button view will the shown details", async () => {
   const textContent = div.textContent;
   expect(textContent).toContain(blog.url);
   expect(textContent).toContain(blog.likes.toString());
+});
+
+test("click on the like button increase like", async () => {
+  const user = userEvent.setup();
+  const blog = {
+    title: "test Blog",
+    author: "tester",
+    url: "test@test.com",
+    likes: 100,
+    user: "652a4e1162ee1ca7690f3fc0",
+  };
+  window.localStorage.setItem("user", JSON.stringify({ username: "tester" }));
+
+  const mockHandler = jest.fn();
+
+  render(<Blog blog={blog} addLike={mockHandler}/>);
+
+  const button = screen.getByText("view");
+  await user.click(button);
+
+  const likeButton = screen.getByText("like");  
+
+  await user.click(likeButton);
+  await user.click(likeButton);    
+
+  expect(mockHandler.mock.calls).toHaveLength(2);
 });
