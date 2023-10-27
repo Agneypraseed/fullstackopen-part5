@@ -42,7 +42,7 @@ const Blog = ({ blog, addLike, deleteBlog }) => {
   return (
     <div style={blogStyle} className="blog">
       {blog.title} {blog.author}
-      <button onClick={() => setShowDetails(true)}>view</button>
+      <button id="view" onClick={() => setShowDetails(true)}>view</button>
     </div>
   );
 };

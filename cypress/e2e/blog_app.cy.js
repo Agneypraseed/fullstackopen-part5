@@ -68,16 +68,26 @@ describe("Blog app", function () {
         cy.contains("likes 1");
       });
 
-      it("it can be deleted by the user who created it", function () {
-        cy.contains("create new blog").click();
-        cy.get("#title").type("Test blog to delete");
-        cy.get("#url").type("test.com");
-        cy.get("#author").type("tester");
-        cy.get("#addBlog").click();
-        cy.contains("Test blog to delete").contains("view").click();
+      it("it can be deleted by the user who created it", function () {       
+        cy.get("#view").click();
         cy.get("#delete").click();
-        cy.on("window:confirm", () => true);
-        cy.contains("Test blog to delete").should("not.exist");
+        cy.on("window:confirm", () => true);        
+        cy.contains("/Cypress Test Blog/").should("not.exist");
+      });
+
+      it("only the creator can see the delete button of a blog", function () {
+        const user2 = {
+          username: "tester 2",
+          name: "Test User 2",
+          password: "test",
+        };
+        cy.request("POST", "http://localhost:3003/api/users", user2);
+        cy.contains("log out").click();
+        cy.get("#username").type("tester 2");
+        cy.get("#password").type("test");
+        cy.get("#login-button").click();
+        cy.contains("view").click();
+        cy.contains("remove").should("not.exist");
       });
     });
   });
