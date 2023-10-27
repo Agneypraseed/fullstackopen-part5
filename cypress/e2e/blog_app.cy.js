@@ -32,7 +32,25 @@ describe("Blog app", function () {
       cy.get("#login-button").click();
 
       cy.contains("Wrong username or password");
-      cy.get('.error').should('have.css', 'color', 'rgb(255, 0, 0)')
+      cy.get(".error").should("have.css", "color", "rgb(255, 0, 0)");
+    });
+  });
+
+  describe("When logged in", function () {
+    beforeEach(function () {
+      cy.get("#username").type("tester");
+      cy.get("#password").type("test");
+      cy.get("#login-button").click();
+    });
+
+    it("A blog can be created", function () {
+      cy.contains("create new blog").click();
+      cy.get("#title").type("Cypress Test Blog");
+      cy.get("#url").type("test.com");
+      cy.get("#author").type("tester");
+      cy.get("#addBlog").click();
+      cy.contains("a new blog Cypress Test Blog by tester added");
+      cy.contains("view");
     });
   });
 });
