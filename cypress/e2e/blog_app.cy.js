@@ -32,6 +32,7 @@ describe("Blog app", function () {
       cy.get("#login-button").click();
 
       cy.contains("Wrong username or password");
+      cy.get('.error').should('have.css', 'color', 'rgb(255, 0, 0)')
     });
   });
 });
