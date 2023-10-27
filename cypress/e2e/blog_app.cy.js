@@ -52,5 +52,21 @@ describe("Blog app", function () {
       cy.contains("a new blog Cypress Test Blog by tester added");
       cy.contains("view");
     });
+
+    describe("and a blog exists", function () {
+      beforeEach(function () {
+        cy.contains("create new blog").click();
+        cy.get("#title").type("Cypress Test Blog");
+        cy.get("#url").type("test.com");
+        cy.get("#author").type("tester");
+        cy.get("#addBlog").click();
+      });
+
+      it("it can be liked", function () {
+        cy.contains("view").click();
+        cy.get("#like").click();
+        cy.contains("likes 1");
+      });
+    });
   });
 });

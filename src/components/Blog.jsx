@@ -25,7 +25,7 @@ const Blog = ({ blog, addLike, deleteBlog }) => {
         {blog.url}
         <br />
         likes {blog.likes}
-        <button onClick={() => addLike(blog.id, blog.likes + 1)}>like</button>
+        <button id="like" onClick={() => addLike(blog.id, blog.likes + 1)}>like</button>
         <br />
         {blog.user.username}
         <br />
