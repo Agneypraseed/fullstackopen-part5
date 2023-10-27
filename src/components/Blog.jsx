@@ -31,7 +31,7 @@ const Blog = ({ blog, addLike, deleteBlog }) => {
         <br />
         {blog.user.username ===
         JSON.parse(window.localStorage.getItem("user")).username ? (
-          <button onClick={handleDelete}>remove</button>
+          <button id="delete" onClick={handleDelete}>remove</button>
         ) : (
           ""
         )}
