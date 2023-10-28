@@ -68,10 +68,10 @@ describe("Blog app", function () {
         cy.contains("likes 1");
       });
 
-      it("it can be deleted by the user who created it", function () {       
+      it("it can be deleted by the user who created it", function () {
         cy.get("#view").click();
         cy.get("#delete").click();
-        cy.on("window:confirm", () => true);        
+        cy.on("window:confirm", () => true);
         cy.contains("/Cypress Test Blog/").should("not.exist");
       });
 
@@ -88,6 +88,31 @@ describe("Blog app", function () {
         cy.get("#login-button").click();
         cy.contains("view").click();
         cy.contains("remove").should("not.exist");
+      });
+
+      it("blogs are ordered according to likes", function () {
+        cy.contains("create new blog").click();
+        cy.get("#title").type("The title with the most likes");
+        cy.get("#url").type("test.com");
+        cy.get("#author").type("tester");
+        cy.get("#addBlog").click();
+        cy.get(".blog").eq(1).find("#view").click();
+        cy.get("#like").click();
+        cy.get("#like").click();        
+        cy.contains("create new blog").click();
+        cy.get("#title").type("The title with the second most likes");
+        cy.get("#url").type("test.com");
+        cy.get("#author").type("tester");
+        cy.get("#addBlog").click();
+        cy.get(".blog").eq(1).find("#view").click();
+        cy.get(".blogdetails").eq(1).find("#like").click();    
+        console.log(cy.get(".blogdetails").eq(0));
+        cy.get(".blogdetails")
+          .eq(0)
+          .should("contain", "The title with the most likes");
+        cy.get(".blogdetails")
+          .eq(1)
+          .should("contain", "The title with the second most likes");
       });
     });
   });
